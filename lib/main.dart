@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'GaleriMakanan.dart';
 
 void main() {
   runApp(const MyApp());
@@ -99,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PlaceholderScreen(title: 'Food Gallery'),
+        builder: (context) => const GaleriMakanan(),
       ),
     );
   }
