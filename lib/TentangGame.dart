@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class TentangGame extends StatelessWidget {
+  const TentangGame({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
-        children: [Image.asset('assets/images/Bg.jpg')],
+        children: [
+          // Background Image
+          Image.asset(
+            'assets/images/Bg.jpg',
+            fit: BoxFit.cover,
+          ),
+        ],
       ),
     );
   }
