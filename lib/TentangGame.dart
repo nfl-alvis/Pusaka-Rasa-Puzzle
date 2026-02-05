@@ -21,6 +21,10 @@ class _TentangGameState extends State<TentangGame> {
       await Future.wait([
         precacheImage(const AssetImage('assets/images/Bg.jpg'), context),
         precacheImage(
+          const AssetImage('assets/images/Logo.png'),
+          context,
+        ), // Logo ditambahkan
+        precacheImage(
           const AssetImage('assets/buttons/BtnKembali2.png'),
           context,
         ),
@@ -210,24 +214,48 @@ class _TentangGameState extends State<TentangGame> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Judul Game
+          // Logo Game (DIGANTI DARI TEXT)
           Center(
-            child: Text(
-              'Pusaka Rasa',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange.shade800,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.orange.shade300, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.orange.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ),
-          ),
-          Center(
-            child: Text(
-              'Sliding Puzzle',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.brown.shade600,
+              child: Image.asset(
+                'assets/images/Logo.png',
+                height: 120,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Column(
+                    children: [
+                      Text(
+                        'Pusaka Rasa',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange.shade800,
+                        ),
+                      ),
+                      Text(
+                        'Sliding Puzzle',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.brown.shade600,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -242,7 +270,7 @@ class _TentangGameState extends State<TentangGame> {
             icon: Icons.info_outline,
             title: 'Deskripsi',
             content:
-                'Pusaka Rasa adalah game puzzle geser edukatif yang '
+                'Pusaka Rasa Puzzle adalah game puzzle geser edukatif yang '
                 'mengenalkan berbagai makanan tradisional Indonesia. '
                 'Pecahkan puzzle untuk mempelajari kekayaan kuliner Nusantara!',
           ),
@@ -289,7 +317,7 @@ class _TentangGameState extends State<TentangGame> {
           // Copyright
           Center(
             child: Text(
-              '© 2024 Pusaka Rasa',
+              '© 2026 Pusaka Rasa Puzzle',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.brown.shade400,

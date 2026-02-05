@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'GaleriMakanan.dart';
 import 'TentangGame.dart';
+import 'Panduan.dart';
 
 void main() {
   runApp(const MyApp());
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PlaceholderScreen(title: 'Guide'),
+        builder: (context) => const Panduan(),
       ),
     );
   }
