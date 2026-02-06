@@ -10,6 +10,16 @@ class Game extends StatefulWidget {
 class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/images/Bg.jpg',
+            fit: BoxFit.cover,
+          ),
+        ],
+      ),
+    );
   }
 }

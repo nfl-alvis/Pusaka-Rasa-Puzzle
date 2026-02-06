@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pusakarasapuzzle/Puzzle.dart';
 import 'GaleriMakanan.dart';
 import 'TentangGame.dart';
 import 'Panduan.dart';
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PlaceholderScreen(title: 'Game Started'),
+        builder: (context) => const Game(),
       ),
     );
   }
