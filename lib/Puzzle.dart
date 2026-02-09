@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -21,6 +22,7 @@ class _GameState extends State<Game> {
   void initState() {
     super.initState();
     _startTimer();
+    _shufflePuzzle();
   }
 
   @override
@@ -40,6 +42,10 @@ class _GameState extends State<Game> {
         precacheImage(const AssetImage('assets/buttons/BtnPause.png'), context),
         precacheImage(const AssetImage('assets/buttons/BtnHint.png'), context),
         precacheImage(const AssetImage('assets/buttons/BtnReset.png'), context),
+        precacheImage(
+          const AssetImage('assets/buttons/KotakKayu.png'),
+          context,
+        ),
       ]);
 
       if (mounted) {
@@ -63,6 +69,107 @@ class _GameState extends State<Game> {
     });
   }
 
+  void _shufflePuzzle() {
+    // Shuffle puzzle dengan random moves
+    final random = Random();
+    for (int i = 0; i < 100; i++) {
+      int emptyIndex = _tiles.indexOf(0);
+      List<int> validMoves = _getValidMoves(emptyIndex);
+      if (validMoves.isNotEmpty) {
+        int randomMove = validMoves[random.nextInt(validMoves.length)];
+        _swapTiles(emptyIndex, randomMove);
+      }
+    }
+  }
+
+  List<int> _getValidMoves(int emptyIndex) {
+    List<int> validMoves = [];
+    int row = emptyIndex ~/ 3;
+    int col = emptyIndex % 3;
+
+    // Atas
+    if (row > 0) validMoves.add(emptyIndex - 3);
+    // Bawah
+    if (row < 2) validMoves.add(emptyIndex + 3);
+    // Kiri
+    if (col > 0) validMoves.add(emptyIndex - 1);
+    // Kanan
+    if (col < 2) validMoves.add(emptyIndex + 1);
+
+    return validMoves;
+  }
+
+  void _swapTiles(int index1, int index2) {
+    int temp = _tiles[index1];
+    _tiles[index1] = _tiles[index2];
+    _tiles[index2] = temp;
+  }
+
+  bool _canMove(int tileIndex) {
+    int emptyIndex = _tiles.indexOf(0);
+    int tileRow = tileIndex ~/ 3;
+    int tileCol = tileIndex % 3;
+    int emptyRow = emptyIndex ~/ 3;
+    int emptyCol = emptyIndex % 3;
+
+    // Cek apakah tile bersebelahan dengan tile kosong
+    return (tileRow == emptyRow && (tileCol - emptyCol).abs() == 1) ||
+        (tileCol == emptyCol && (tileRow - emptyRow).abs() == 1);
+  }
+
+  void _moveTile(int tileIndex) {
+    if (_isPaused) return;
+
+    if (_canMove(tileIndex)) {
+      setState(() {
+        int emptyIndex = _tiles.indexOf(0);
+        _swapTiles(tileIndex, emptyIndex);
+      });
+
+      // Cek apakah puzzle selesai
+      if (_isPuzzleSolved()) {
+        _timer?.cancel();
+        _showWinDialog();
+      }
+    }
+  }
+
+  bool _isPuzzleSolved() {
+    for (int i = 0; i < 8; i++) {
+      if (_tiles[i] != i + 1) return false;
+    }
+    return _tiles[8] == 0;
+  }
+
+  void _showWinDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('🎉 Selamat!'),
+        content: Text(
+          'Anda menyelesaikan puzzle dalam waktu ${_formatTime(_seconds)}!',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _resetGame();
+            },
+            child: const Text('Main Lagi'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: const Text('Kembali ke Menu'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _togglePause() {
     setState(() {
       _isPaused = !_isPaused;
@@ -74,15 +181,39 @@ class _GameState extends State<Game> {
       _seconds = 0;
       _isPaused = false;
       _tiles = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+      _shufflePuzzle();
     });
+    _timer?.cancel();
+    _startTimer();
   }
 
   void _showHint() {
-    // Implementasi hint
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Hint: Geser tile yang berdekatan dengan ruang kosong!'),
-        duration: Duration(seconds: 2),
+    // Tampilkan gambar asli sebagai hint
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hint - Gambar Asli'),
+        content: Container(
+          width: 200,
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Center(
+            child: Text(
+              '1 2 3\n4 5 6\n7 8 _',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Tutup'),
+          ),
+        ],
       ),
     );
   }
@@ -106,6 +237,7 @@ class _GameState extends State<Game> {
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Stack(
@@ -135,22 +267,23 @@ class _GameState extends State<Game> {
                 // Top Bar dengan tombol Back dan Pause
                 _buildTopBar(context),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // Timer Display
                 _buildTimerDisplay(),
 
-                const Spacer(),
+                // Spacer lebih kecil untuk membuat puzzle lebih ke tengah
+                SizedBox(height: screenHeight * 0.04),
 
-                // Puzzle Grid
-                _buildPuzzleGrid(screenWidth),
+                // Puzzle Grid - Centered
+                Expanded(child: Center(child: _buildPuzzleGrid(screenWidth))),
 
-                const Spacer(),
+                SizedBox(height: screenHeight * 0.02),
 
                 // Bottom Buttons (Hint & Reset)
                 _buildBottomButtons(screenWidth),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
               ],
             ),
           ),
@@ -164,11 +297,11 @@ class _GameState extends State<Game> {
 
   Widget _buildTopBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Back Button
+          // Back Button - ukuran sama dengan halaman lain
           _buildCircularButton(
             assetPath: 'assets/buttons/BtnKembali2.png',
             onTap: () => Navigator.pop(context),
@@ -198,36 +331,33 @@ class _GameState extends State<Game> {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(35),
-          child: Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+          borderRadius: BorderRadius.circular(25),
+          child: Image.asset(
+            assetPath,
+            width: 45, // Sama dengan ukuran di halaman lain
+            height: 45,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.brown.shade400,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Image.asset(
-              assetPath,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.brown.shade400,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    semanticLabel == 'Kembali' ? Icons.arrow_back : Icons.pause,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                );
-              },
-            ),
+                child: Icon(
+                  semanticLabel == 'Kembali' ? Icons.arrow_back : Icons.pause,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -238,15 +368,12 @@ class _GameState extends State<Game> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.3),
+        color: Colors.white.withOpacity(0.3),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.5),
-          width: 2,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.5), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -290,82 +417,108 @@ class _GameState extends State<Game> {
 
   Widget _buildPuzzleGrid(double screenWidth) {
     final gridSize = screenWidth * 0.85;
-    final tileSize = (gridSize - 32) / 3; // 3x3 grid dengan spacing
 
     return Container(
       width: gridSize,
       height: gridSize,
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFFD4A574),
-            const Color(0xFFB8895C),
-            const Color(0xFFA67C52),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF8B6F47), width: 4),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
+            color: Colors.black.withOpacity(0.4),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: 9,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-        ),
-        itemBuilder: (context, index) {
-          return _buildPuzzleTile(_tiles[index], tileSize);
-        },
+      child: Stack(
+        children: [
+          // Background Kayu
+          ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Image.asset(
+              'assets/buttons/KotakKayu.png',
+              width: gridSize,
+              height: gridSize,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: gridSize,
+                  height: gridSize,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFFD4A574),
+                        const Color(0xFFB8895C),
+                        const Color(0xFFA67C52),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: const Color(0xFF8B6F47),
+                      width: 4,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // Grid Tiles
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 9,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+              ),
+              itemBuilder: (context, index) {
+                return _buildPuzzleTile(_tiles[index], index);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildPuzzleTile(int number, double size) {
+  Widget _buildPuzzleTile(int number, int index) {
     if (number == 0) {
-      // Empty tile
+      // Empty tile - transparan
       return Container(
-        decoration: BoxDecoration(
-          color: Colors.brown.shade600.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Colors.brown.shade700.withValues(alpha: 0.3),
-            width: 2,
-          ),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.brown.shade300, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          number.toString(),
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: Colors.brown.shade800,
+    return GestureDetector(
+      onTap: () => _moveTile(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.brown.shade300, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            number.toString(),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown.shade800,
+            ),
           ),
         ),
       ),
@@ -382,9 +535,8 @@ class _GameState extends State<Game> {
           _buildActionButton(
             assetPath: 'assets/buttons/BtnHint.png',
             label: 'Hint',
-            color: Colors.orange,
             onTap: _showHint,
-            width: screenWidth * 0.4,
+            width: screenWidth * 0.37, // Sama dengan ukuran di main.dart
           ),
 
           const SizedBox(width: 20),
@@ -393,9 +545,8 @@ class _GameState extends State<Game> {
           _buildActionButton(
             assetPath: 'assets/buttons/BtnReset.png',
             label: 'Reset',
-            color: Colors.purple,
             onTap: _resetGame,
-            width: screenWidth * 0.4,
+            width: screenWidth * 0.37, // Sama dengan ukuran di main.dart
           ),
         ],
       ),
@@ -405,68 +556,63 @@ class _GameState extends State<Game> {
   Widget _buildActionButton({
     required String assetPath,
     required String label,
-    required Color color,
     required VoidCallback onTap,
     required double width,
   }) {
     return Semantics(
       label: label,
       button: true,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(25),
-          child: Container(
-            width: width,
-            height: 60,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Image.asset(
+          assetPath,
+          width: width,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              width: width,
+              height: width * 0.4,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    label == 'Hint'
+                        ? Colors.orange.shade400
+                        : Colors.purple.shade400,
+                    label == 'Hint'
+                        ? Colors.orange.shade600
+                        : Colors.purple.shade600,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
-              ],
-            ),
-            child: Image.asset(
-              assetPath,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        color.withValues(alpha: 0.6),
-                        color.withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.white, width: 3),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Center(
-                    child: Text(
-                      label,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(1, 1),
-                            blurRadius: 3,
-                          ),
-                        ],
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black54,
+                        offset: Offset(1, 1),
+                        blurRadius: 3,
                       ),
-                    ),
+                    ],
                   ),
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -474,7 +620,7 @@ class _GameState extends State<Game> {
 
   Widget _buildPauseOverlay() {
     return Container(
-      color: Colors.black.withValues(alpha: 0.7),
+      color: Colors.black.withOpacity(0.7),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

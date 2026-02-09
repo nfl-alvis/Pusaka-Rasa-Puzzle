@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pusakarasapuzzle/PilihLevel.dart';
 import 'package:pusakarasapuzzle/Puzzle.dart';
 import 'GaleriMakanan.dart';
 import 'TentangGame.dart';
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PlaceholderScreen(title: 'Choose Level'),
+        builder: (context) => const PilihLevel(),
       ),
     );
   }
