@@ -37,18 +37,9 @@ class _GameState extends State<Game> {
           const AssetImage('assets/buttons/BtnKembali2.png'),
           context,
         ),
-        precacheImage(
-          const AssetImage('assets/buttons/BtnPause.png'),
-          context,
-        ),
-        precacheImage(
-          const AssetImage('assets/buttons/BtnHint.png'),
-          context,
-        ),
-        precacheImage(
-          const AssetImage('assets/buttons/BtnReset.png'),
-          context,
-        ),
+        precacheImage(const AssetImage('assets/buttons/BtnPause.png'), context),
+        precacheImage(const AssetImage('assets/buttons/BtnHint.png'), context),
+        precacheImage(const AssetImage('assets/buttons/BtnReset.png'), context),
       ]);
 
       if (mounted) {
@@ -111,9 +102,7 @@ class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -232,9 +221,7 @@ class _GameState extends State<Game> {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    semanticLabel == 'Kembali'
-                        ? Icons.arrow_back
-                        : Icons.pause,
+                    semanticLabel == 'Kembali' ? Icons.arrow_back : Icons.pause,
                     color: Colors.white,
                     size: 30,
                   ),
@@ -276,11 +263,7 @@ class _GameState extends State<Game> {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
             ),
-            child: const Icon(
-              Icons.access_time,
-              color: Colors.white,
-              size: 20,
-            ),
+            child: const Icon(Icons.access_time, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 12),
 
@@ -324,10 +307,7 @@ class _GameState extends State<Game> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: const Color(0xFF8B6F47),
-          width: 4,
-        ),
+        border: Border.all(color: const Color(0xFF8B6F47), width: 4),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.4),
@@ -370,10 +350,7 @@ class _GameState extends State<Game> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.brown.shade300,
-          width: 2,
-        ),
+        border: Border.all(color: Colors.brown.shade300, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
@@ -459,7 +436,10 @@ class _GameState extends State<Game> {
                 return Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [color.withValues(alpha: 0.6), color.withValues(alpha: 0.8)],
+                      colors: [
+                        color.withValues(alpha: 0.6),
+                        color.withValues(alpha: 0.8),
+                      ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -517,10 +497,7 @@ class _GameState extends State<Game> {
             ElevatedButton.icon(
               onPressed: _togglePause,
               icon: const Icon(Icons.play_arrow, size: 30),
-              label: const Text(
-                'Resume',
-                style: TextStyle(fontSize: 24),
-              ),
+              label: const Text('Resume', style: TextStyle(fontSize: 24)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
