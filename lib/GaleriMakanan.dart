@@ -35,7 +35,7 @@ class _GaleriMakananState extends State<GaleriMakanan> {
     FoodItem(
       id: '2',
       name: 'Sate Ayam',
-      imagePath: 'assets/foods/sate_ayam.png',
+      imagePath: 'assets/foods/sate.png',
       description: 'Sate ayam dengan bumbu kacang',
     ),
     FoodItem(
@@ -58,12 +58,12 @@ class _GaleriMakananState extends State<GaleriMakanan> {
     ),
     FoodItem(
       id: '6',
-      name: 'Bakso',
-      imagePath: 'assets/foods/bakso.png',
-      description: 'Bakso daging sapi kenyal',
+      name: 'Rawon',
+      imagePath: 'assets/foods/rawon.png',
+      description: 'Rawon daging sapi dengan kuah hitam',
     ),
   ];
-  
+
   void _onFoodItemTapped(FoodItem item) {
     // Tampilkan detail atau navigasi ke halaman detail
     showDialog(
@@ -229,8 +229,7 @@ class _GaleriMakananState extends State<GaleriMakanan> {
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.brown,
-                          fontFamily:
-                              'Arial', // Bisa diganti dengan custom font
+                          fontFamily: 'Arial',
                         ),
                       ),
                     ),
@@ -291,29 +290,16 @@ class _GaleriMakananState extends State<GaleriMakanan> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // BORDER KAYU (BACKGROUND)
-                  Image.asset(
-                    'assets/buttons/BorderKayuGaleriMakanan.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.brown.shade300,
-                              Colors.brown.shade500,
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  // GAMBAR MAKANAN (FOREGROUND)
+                  // GAMBAR MAKANAN (BACKGROUND) - Dengan padding pas ke area putih
                   Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      top: 8,
+                      bottom: 44, // Tinggi bagian kayu bawah
+                    ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
                         item.imagePath,
                         fit: BoxFit.cover,
@@ -346,33 +332,43 @@ class _GaleriMakananState extends State<GaleriMakanan> {
                     ),
                   ),
 
-                  // OVERLAY NAMA MAKANAN (OPTIONAL)
+                  // BORDER KAYU (FOREGROUND) - Di depan
+                  Image.asset(
+                    'assets/buttons/BorderKayuGaleriMakanan.png',
+                    fit: BoxFit.fill,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.brown.shade700,
+                            width: 8,
+                          ),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // NAMA MAKANAN - Tetap di bagian bawah
                   Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.7),
-                          ],
-                        ),
-                      ),
+                    height: 50,
+                    child: Center(
                       child: Text(
                         item.name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 6,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 1,

@@ -46,6 +46,17 @@ class _GameState extends State<Game> {
           const AssetImage('assets/buttons/KotakKayu.png'),
           context,
         ),
+        // Precache tile images (1-8)
+        for (int i = 1; i <= 8; i++)
+          precacheImage(
+            AssetImage('assets/challenge/nasiGoreng/tile_0$i.png'),
+            context,
+          ),
+        // Precache gambar asli untuk hint
+        precacheImage(
+          const AssetImage('assets/foods/nasi_goreng.png'),
+          context,
+        ),
       ]);
 
       if (mounted) {
@@ -194,17 +205,38 @@ class _GameState extends State<Game> {
       builder: (context) => AlertDialog(
         title: const Text('Hint - Gambar Asli'),
         content: Container(
-          width: 200,
-          height: 200,
+          width: 250,
+          height: 250,
           decoration: BoxDecoration(
-            color: Colors.grey.shade300,
             borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          child: const Center(
-            child: Text(
-              '1 2 3\n4 5 6\n7 8 _',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              'assets/foods/nasi_goreng.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.grey.shade300,
+                  child: const Center(
+                    child: Text(
+                      '1 2 3\n4 5 6\n7 8 _',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -301,7 +333,7 @@ class _GameState extends State<Game> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Back Button - ukuran sama dengan halaman lain
+          // Back Button
           _buildCircularButton(
             assetPath: 'assets/buttons/BtnKembali2.png',
             onTap: () => Navigator.pop(context),
@@ -334,7 +366,7 @@ class _GameState extends State<Game> {
           borderRadius: BorderRadius.circular(25),
           child: Image.asset(
             assetPath,
-            width: 45, // Sama dengan ukuran di halaman lain
+            width: 45,
             height: 45,
             errorBuilder: (context, error, stackTrace) {
               return Container(
@@ -500,25 +532,40 @@ class _GameState extends State<Game> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.brown.shade300, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Center(
-          child: Text(
-            number.toString(),
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.brown.shade800,
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.asset(
+            'assets/challenge/nasiGoreng/tile_0$number.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              // Fallback jika gambar tidak ditemukan
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.brown.shade300, width: 2),
+                ),
+                child: Center(
+                  child: Text(
+                    number.toString(),
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown.shade800,
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -536,7 +583,7 @@ class _GameState extends State<Game> {
             assetPath: 'assets/buttons/BtnHint.png',
             label: 'Hint',
             onTap: _showHint,
-            width: screenWidth * 0.37, // Sama dengan ukuran di main.dart
+            width: screenWidth * 0.37,
           ),
 
           const SizedBox(width: 20),
@@ -546,7 +593,7 @@ class _GameState extends State<Game> {
             assetPath: 'assets/buttons/BtnReset.png',
             label: 'Reset',
             onTap: _resetGame,
-            width: screenWidth * 0.37, // Sama dengan ukuran di main.dart
+            width: screenWidth * 0.37,
           ),
         ],
       ),
