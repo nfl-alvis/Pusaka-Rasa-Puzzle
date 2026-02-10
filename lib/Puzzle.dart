@@ -46,12 +46,15 @@ class _GameState extends State<Game> {
           const AssetImage('assets/buttons/KotakKayu.png'),
           context,
         ),
-        // Precache tile images (1-8)
-        for (int i = 1; i <= 8; i++)
-          precacheImage(
-            AssetImage('assets/challenge/nasiGoreng/tile_0$i.png'),
-            context,
-          ),
+        // Precache tile images (01-08) dari folder nasiGoreng
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_01.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_02.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_03.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_04.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_05.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_06.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_07.png'), context),
+        precacheImage(const AssetImage('assets/challenge/nasiGoreng/tile_08.png'), context),
         // Precache gambar asli untuk hint
         precacheImage(
           const AssetImage('assets/foods/nasi_goreng.png'),
@@ -526,6 +529,9 @@ class _GameState extends State<Game> {
       );
     }
 
+    // Format number dengan leading zero (01, 02, 03, dst)
+    String tileNumber = number.toString().padLeft(2, '0');
+
     return GestureDetector(
       onTap: () => _moveTile(index),
       child: AnimatedContainer(
@@ -544,7 +550,7 @@ class _GameState extends State<Game> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.asset(
-            'assets/challenge/nasiGoreng/tile_0$number.png',
+            'assets/challenge/nasiGoreng/tile_$tileNumber.png',
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               // Fallback jika gambar tidak ditemukan

@@ -154,83 +154,88 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
 
-          // Logo
-          Positioned(
-            top: screenHeight * 0.1,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Image.asset(
-                'assets/images/Logo.png',
-                width: screenWidth * 0.7,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    Icons.videogame_asset,
-                    size: 100,
-                    color: Colors.white,
-                  );
-                },
-              ),
-            ),
-          ),
+          // Content with Logo and Buttons
+          SafeArea(
+            child: Column(
+              children: [
+                // Logo Section
+                SizedBox(height: screenHeight * 0.02),
+                Image.asset(
+                  'assets/images/Logo.png',
+                  width: screenWidth * 0.9,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.videogame_asset,
+                      size: 100,
+                      color: Colors.white,
+                    );
+                  },
+                ),
 
-          // Menu Buttons
-          Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Start Game Button
-                  GameButton(
-                    assetPath: 'assets/buttons/BtnMulaiPermainan.png',
-                    width: screenWidth * 0.45,
-                    onTap: _onStartGame,
-                    semanticLabel: 'Mulai Permainan',
-                  ),
-                  const SizedBox(height: 16),
+                // Spacer antara Logo dan Tombol
+                SizedBox(height: screenHeight * 0.06),
 
-                  // Row 1: Choose Level & Food Gallery
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GameButton(
-                        assetPath: 'assets/buttons/BtnPilihLevel.png',
-                        width: screenWidth * 0.37,
-                        onTap: _onChooseLevel,
-                        semanticLabel: 'Pilih Level',
-                      ),
-                      const SizedBox(width: 20),
-                      GameButton(
-                        assetPath: 'assets/buttons/BtnGaleriMakanan.png',
-                        width: screenWidth * 0.37,
-                        onTap: _onFoodGallery,
-                        semanticLabel: 'Galeri Makanan',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
+                // Menu Buttons Section
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Start Game Button
+                        GameButton(
+                          assetPath: 'assets/buttons/BtnMulaiPermainan.png',
+                          width: screenWidth * 0.45,
+                          onTap: _onStartGame,
+                          semanticLabel: 'Mulai Permainan',
+                        ),
+                        const SizedBox(height: 16),
 
-                  // Row 2: About Game & Guide
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GameButton(
-                        assetPath: 'assets/buttons/BtnTentangGame.png',
-                        width: screenWidth * 0.37,
-                        onTap: _onAboutGame,
-                        semanticLabel: 'Tentang Game',
-                      ),
-                      const SizedBox(width: 20),
-                      GameButton(
-                        assetPath: 'assets/buttons/BtnPanduan.png',
-                        width: screenWidth * 0.37,
-                        onTap: _onGuide,
-                        semanticLabel: 'Panduan',
-                      ),
-                    ],
+                        // Row 1: Choose Level & Food Gallery
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GameButton(
+                              assetPath: 'assets/buttons/BtnPilihLevel.png',
+                              width: screenWidth * 0.37,
+                              onTap: _onChooseLevel,
+                              semanticLabel: 'Pilih Level',
+                            ),
+                            const SizedBox(width: 20),
+                            GameButton(
+                              assetPath: 'assets/buttons/BtnGaleriMakanan.png',
+                              width: screenWidth * 0.37,
+                              onTap: _onFoodGallery,
+                              semanticLabel: 'Galeri Makanan',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Row 2: About Game & Guide
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GameButton(
+                              assetPath: 'assets/buttons/BtnTentangGame.png',
+                              width: screenWidth * 0.37,
+                              onTap: _onAboutGame,
+                              semanticLabel: 'Tentang Game',
+                            ),
+                            const SizedBox(width: 20),
+                            GameButton(
+                              assetPath: 'assets/buttons/BtnPanduan.png',
+                              width: screenWidth * 0.37,
+                              onTap: _onGuide,
+                              semanticLabel: 'Panduan',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
