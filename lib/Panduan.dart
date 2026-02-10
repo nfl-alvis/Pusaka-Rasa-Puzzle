@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'CaraBermain.dart';
+import 'TipsTrik.dart';
 
 class Panduan extends StatefulWidget {
   const Panduan({super.key});
@@ -9,7 +11,6 @@ class Panduan extends StatefulWidget {
 
 class _PanduanState extends State<Panduan> {
   bool _isLoading = true;
-  int? _expandedIndex; // Track which section is expanded
 
   @override
   void didChangeDependencies() {
@@ -27,6 +28,14 @@ class _PanduanState extends State<Panduan> {
         ),
         precacheImage(
           const AssetImage('assets/buttons/PanduanLogo.png'),
+          context,
+        ),
+        precacheImage(
+          const AssetImage('assets/buttons/BtnCaraBermain.png'),
+          context,
+        ),
+        precacheImage(
+          const AssetImage('assets/buttons/BtnTips.png'),
           context,
         ),
       ]);
@@ -80,7 +89,7 @@ class _PanduanState extends State<Panduan> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -116,7 +125,7 @@ class _PanduanState extends State<Panduan> {
               border: Border.all(color: Colors.brown.shade800, width: 3),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 6,
                   offset: const Offset(0, 3),
                 ),
@@ -138,148 +147,27 @@ class _PanduanState extends State<Panduan> {
     );
   }
 
-  void _toggleExpansion(int index) {
-    setState(() {
-      if (_expandedIndex == index) {
-        _expandedIndex = null; // Close if already open
-      } else {
-        _expandedIndex = index; // Open new section
-      }
-    });
+  Widget _buildMenuButton({
+    required String imagePath,
+    required VoidCallback onTap,
+  }) {
+    return _AnimatedMenuButton(
+      imagePath: imagePath,
+      onTap: onTap,
+    );
   }
 
-  Widget _buildGuideCard({
-    required int index,
-    required IconData icon,
-    required String title,
-    required String description,
-  }) {
-    final isExpanded = _expandedIndex == index;
+  void _navigateToCaraBermain() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CaraBermain()),
+    );
+  }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        // Gradient kayu coklat
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFFD4A574), // Coklat kayu terang
-            const Color(0xFFB8895C), // Coklat kayu medium
-            const Color(0xFFA67C52), // Coklat kayu gelap
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF8B6F47), // Border coklat tua
-          width: 3,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.brown.shade900.withOpacity(0.4),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _toggleExpansion(index),
-          borderRadius: BorderRadius.circular(20),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header Row
-                Row(
-                  children: [
-                    // Icon dengan background putih transparan
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.5),
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        icon,
-                        color: Colors.brown.shade900,
-                        size: 28,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-
-                    // Title
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown.shade900,
-                          shadows: [
-                            Shadow(
-                              color: Colors.white.withOpacity(0.5),
-                              offset: const Offset(1, 1),
-                              blurRadius: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Expand/Collapse Icon
-                    Icon(
-                      isExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: Colors.brown.shade900,
-                      size: 28,
-                    ),
-                  ],
-                ),
-
-                // Expandable Description
-                AnimatedCrossFade(
-                  firstChild: const SizedBox.shrink(),
-                  secondChild: Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.4),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.brown.shade900,
-                        height: 1.6,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  crossFadeState: isExpanded
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: const Duration(milliseconds: 300),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+  void _navigateToTips() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TipsTrik()),
     );
   }
 
@@ -292,6 +180,7 @@ class _PanduanState extends State<Panduan> {
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Stack(
@@ -304,7 +193,7 @@ class _PanduanState extends State<Panduan> {
             width: double.infinity,
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: Colors.blue.shade200,
+                color: Colors.brown.shade300,
                 child: const Center(
                   child: Icon(Icons.error, size: 50, color: Colors.red),
                 ),
@@ -319,49 +208,28 @@ class _PanduanState extends State<Panduan> {
                 // Header
                 _buildHeader(context),
 
-                // Guide Cards
+                const SizedBox(height: 30), // Space after header
+
+                // Menu Buttons
                 Expanded(
                   child: SingleChildScrollView(
                     padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05,
-                      vertical: 20,
+                      horizontal: screenWidth * 0.08,
                     ),
                     child: Column(
                       children: [
-                        // 1. Memulai Permainan
-                        _buildGuideCard(
-                          index: 0,
-                          icon: Icons.grid_3x3,
-                          title: '1. Memulai Permainan',
-                          description:
-                              'Pilih Gambar: Jelajahi galeri gambar makanan khas Indonesia yang lezat. Ketuk gambar yang paling mengugah selera Anda untuk dijadikan puzzle.',
+                        // Cara Bermain Button
+                        _buildMenuButton(
+                          imagePath: 'assets/buttons/BtnCaraBermain.png',
+                          onTap: _navigateToCaraBermain,
                         ),
+                        
+                        SizedBox(height: screenHeight * 0.025),
 
-                        // 2. Menyusun Puzzle
-                        _buildGuideCard(
-                          index: 1,
-                          icon: Icons.extension,
-                          title: '2. Menyusun Puzzle',
-                          description:
-                              'Geser Potongan: Gunakan jari Anda untuk menggeser potongan puzzle. Susun kembali gambar makanan hingga sempurna. Semakin cepat Anda menyelesaikan, semakin tinggi skor Anda!',
-                        ),
-
-                        // 3. Gunakan Bantuan
-                        _buildGuideCard(
-                          index: 2,
-                          icon: Icons.lightbulb_outline,
-                          title: '3. Gunakan Bantuan',
-                          description:
-                              'Tombol Bantuan: Jika Anda merasa kesulitan, gunakan tombol bantuan untuk melihat pratinjau gambar asli. Fitur ini akan membantu Anda menyelesaikan puzzle dengan lebih mudah.',
-                        ),
-
-                        // 4. Tujuan & Skor
-                        _buildGuideCard(
-                          index: 3,
-                          icon: Icons.emoji_events,
-                          title: '4. Tujuan & Skor',
-                          description:
-                              'Selesaikan Puzzle: Tujuan utama adalah menyusun puzzle hingga sempurna. Raih skor tertinggi dengan menyelesaikan puzzle secepat mungkin dengan jumlah gerakan minimum!',
+                        // Tips dan Trik Button
+                        _buildMenuButton(
+                          imagePath: 'assets/buttons/BtnTips.png',
+                          onTap: _navigateToTips,
                         ),
                       ],
                     ),
@@ -371,6 +239,85 @@ class _PanduanState extends State<Panduan> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AnimatedMenuButton extends StatefulWidget {
+  final String imagePath;
+  final VoidCallback onTap;
+
+  const _AnimatedMenuButton({
+    required this.imagePath,
+    required this.onTap,
+  });
+
+  @override
+  State<_AnimatedMenuButton> createState() => _AnimatedMenuButtonState();
+}
+
+class _AnimatedMenuButtonState extends State<_AnimatedMenuButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.95 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: Image.asset(
+          widget.imagePath,
+          width: double.infinity,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              height: 120,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFFD4A574),
+                    const Color(0xFFB8895C),
+                    const Color(0xFFA67C52),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                  color: const Color(0xFF8B6F47),
+                  width: 3,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.brown.shade900.withValues(alpha: 0.4),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  widget.imagePath.contains('CaraBermain')
+                      ? 'Cara Bermain Puzzle'
+                      : 'Tips dan Trik',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown.shade900,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

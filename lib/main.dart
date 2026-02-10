@@ -4,6 +4,7 @@ import 'package:pusakarasapuzzle/Puzzle.dart';
 import 'GaleriMakanan.dart';
 import 'TentangGame.dart';
 import 'Panduan.dart';
+import 'Pengaturan.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,6 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         precacheImage(
           const AssetImage('assets/buttons/BtnPanduan.png'),
+          context,
+        ),
+        precacheImage(
+          const AssetImage('assets/buttons/BtnPengaturan.png'),
           context,
         ),
       ]);
@@ -123,6 +128,16 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => const Panduan(),
+      ),
+    );
+  }
+
+  void _onSettings() {
+    // Navigate to settings screen (Placeholder)
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Pengaturan(),
       ),
     );
   }
@@ -231,6 +246,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                         const SizedBox(height: 20),
+
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     GameButton(
+                        //       assetPath: 'assets/buttons/BtnPengaturan.png', 
+                        //       width: screenWidth * 0.37, 
+                        //       onTap: _onSettings, semanticLabel: 'Pengaturan'
+                        //     ),
+                        //   ]
+                        // )
                       ],
                     ),
                   ),
