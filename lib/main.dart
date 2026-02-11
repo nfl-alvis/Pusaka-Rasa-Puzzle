@@ -58,11 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
         ),
         precacheImage(
-          const AssetImage('assets/buttons/BtnTentangGame.png'),
+          const AssetImage('assets/buttons/BtnTentangGame2.png'),
           context,
         ),
         precacheImage(
-          const AssetImage('assets/buttons/BtnPanduan.png'),
+          const AssetImage('assets/buttons/BtnPanduan2.png'),
           context,
         ),
         precacheImage(
@@ -231,14 +231,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GameButton(
-                              assetPath: 'assets/buttons/BtnTentangGame.png',
+                              assetPath: 'assets/buttons/BtnTentangGame2.png',
                               width: screenWidth * 0.37,
                               onTap: _onAboutGame,
                               semanticLabel: 'Tentang Game',
                             ),
                             const SizedBox(width: 20),
                             GameButton(
-                              assetPath: 'assets/buttons/BtnPanduan.png',
+                              assetPath: 'assets/buttons/BtnPanduan2.png',
                               width: screenWidth * 0.37,
                               onTap: _onGuide,
                               semanticLabel: 'Panduan',
