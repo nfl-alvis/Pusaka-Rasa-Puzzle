@@ -64,6 +64,7 @@ flutter:
     - assets/icons/
     - assets/foods/
     - assets/challenge/nasiGoreng/
+    - assets/challenge/gudeg/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

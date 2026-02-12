@@ -30,7 +30,7 @@ class _GaleriMakananState extends State<GaleriMakanan> {
       id: '1',
       name: 'Nasi Goreng',
       imagePath: 'assets/foods/nasi_goreng.png',
-      description: 'Nasi goreng spesial dengan telur',
+      description: 'Nasi goreng adalah makanan khas Indonesia yang dibuat dari nasi yang digoreng dengan bumbu seperti bawang dan kecap, sehingga rasanya gurih dan aromanya khas.',
     ),
     FoodItem(
       id: '2',

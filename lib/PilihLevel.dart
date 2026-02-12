@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Puzzle.dart';
+import 'Puzzle2.dart';
 
 class PilihLevel extends StatefulWidget {
   const PilihLevel({super.key});
@@ -191,10 +193,28 @@ class _PilihLevelState extends State<PilihLevel> {
           ? () {
               // Navigate to game with selected level
               print('Level $level dipilih');
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => GamePage(level: level))
-              // );
+              
+              // Navigasi ke puzzle yang berbeda berdasarkan level
+              Widget gameScreen;
+              
+              switch (level) {
+                case 1:
+                  gameScreen = const Game2(); // Level 1 -> Puzzle2.dart (Gudeg)
+                  break;
+                case 2:
+                  gameScreen = const Game(); // Level 2 -> Puzzle.dart (Nasi Goreng)
+                  break;
+                case 3:
+                  gameScreen = const Game2(); // Level 3 -> Puzzle2.dart (Gudeg)
+                  break;
+                default:
+                  gameScreen = const Game(); // Default ke Puzzle.dart
+              }
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => gameScreen),
+              );
             }
           : null,
       child: isUnlocked ? _buildUnlockedButton(level) : _buildLockedButton(),

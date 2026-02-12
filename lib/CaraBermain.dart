@@ -15,6 +15,7 @@ class _CaraBermainState extends State<CaraBermain> {
     super.didChangeDependencies();
     _precacheImages();
   }
+  
 
   Future<void> _precacheImages() async {
     try {
@@ -22,10 +23,6 @@ class _CaraBermainState extends State<CaraBermain> {
         precacheImage(const AssetImage('assets/images/Bg.jpg'), context),
         precacheImage(
           const AssetImage('assets/buttons/BtnKembali2.png'),
-          context,
-        ),
-        precacheImage(
-          const AssetImage('assets/buttons/CaraBermainLogo.png'),
           context,
         ),
       ]);
@@ -76,10 +73,10 @@ class _CaraBermainState extends State<CaraBermain> {
           SafeArea(
             child: Column(
               children: [
-                // Header
+                // Header dengan Back Button saja
                 _buildHeader(),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 12),
 
                 // Scrollable Content
                 Expanded(
@@ -123,7 +120,7 @@ class _CaraBermainState extends State<CaraBermain> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -140,51 +137,6 @@ class _CaraBermainState extends State<CaraBermain> {
               ),
             ),
           ),
-
-          const SizedBox(width: 14),
-
-          // Title Logo
-          // Expanded(
-          //   child: Semantics(
-          //     label: 'Cara Bermain',
-          //     header: true,
-          //     child: Image.asset(
-          //       'assets/buttons/CaraBermainLogo.png',
-          //       height: 60,
-          //       fit: BoxFit.contain,
-          //       errorBuilder: (context, error, stackTrace) {
-          //         return Container(
-          //           height: 60,
-          //           decoration: BoxDecoration(
-          //             color: Colors.orange.shade200,
-          //             borderRadius: BorderRadius.circular(30),
-          //             border: Border.all(
-          //               color: Colors.brown.shade800,
-          //               width: 3,
-          //             ),
-          //             boxShadow: [
-          //               BoxShadow(
-          //                 color: Colors.black.withOpacity(0.15),
-          //                 blurRadius: 6,
-          //                 offset: const Offset(0, 3),
-          //               ),
-          //             ],
-          //           ),
-          //           child: const Center(
-          //             child: Text(
-          //               'Cara Bermain',
-          //               style: TextStyle(
-          //                 fontSize: 24,
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Colors.brown,
-          //               ),
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -202,14 +154,14 @@ class _CaraBermainState extends State<CaraBermain> {
   Widget _buildInfoCard(double screenWidth) {
     return Container(
       width: screenWidth * 0.95,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.brown.shade300, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -218,179 +170,154 @@ class _CaraBermainState extends State<CaraBermain> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
-          // Center(
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         colors: [Colors.orange.shade400, Colors.orange.shade600],
-          //       ),
-          //       borderRadius: BorderRadius.circular(25),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.orange.withOpacity(0.3),
-          //           blurRadius: 8,
-          //           offset: const Offset(0, 3),
-          //         ),
-          //       ],
-          //     ),
-          //     child: const Text(
-          //       '🎮 Panduan Bermain Puzzle',
-          //       style: TextStyle(
-          //         fontSize: 22,
-          //         fontWeight: FontWeight.bold,
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          const SizedBox(height: 24),
-
           // Step 1
           _buildStepCard(
-            stepNumber: '1',
+            icon: Icons.grid_view,
             title: 'Pilih Level',
             description:
                 'Pilih level kesulitan yang sesuai dengan kemampuan Anda. Mulai dari level mudah hingga level sulit.',
-            icon: Icons.grid_view,
             color: Colors.blue,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
           // Step 2
           _buildStepCard(
-            stepNumber: '2',
+            icon: Icons.touch_app,
             title: 'Geser Potongan Puzzle',
             description:
                 'Ketuk potongan puzzle yang berdekatan dengan kotak kosong untuk menggesernya. Susun gambar hingga sempurna!',
-            icon: Icons.touch_app,
             color: Colors.green,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
           // Step 3
           _buildStepCard(
-            stepNumber: '3',
+            icon: Icons.help_outline,
             title: 'Gunakan Fitur Bantuan',
             description:
                 'Gunakan tombol Hint untuk melihat gambar asli, atau Reset untuk mengacak ulang puzzle.',
-            icon: Icons.help_outline,
             color: Colors.orange,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
           // Step 4
           _buildStepCard(
-            stepNumber: '4',
+            icon: Icons.check_circle,
             title: 'Selesaikan Puzzle',
             description:
                 'Susun semua potongan dengan urutan yang benar untuk menyelesaikan puzzle dan membuka informasi makanan!',
-            icon: Icons.check_circle,
             color: Colors.purple,
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
           // Divider
-          Divider(color: Colors.brown.shade300, thickness: 2),
-          const SizedBox(height: 20),
+          Divider(color: Colors.brown.shade300, thickness: 2.5),
+          const SizedBox(height: 28),
 
           // Kontrol Game
           _buildControlSection(),
-
-          const SizedBox(height: 20),
-          Divider(color: Colors.brown.shade300, thickness: 2),
-          const SizedBox(height: 20),
-
-          // Tips Dasar
-          _buildTipsSection(),
         ],
       ),
     );
   }
 
   Widget _buildStepCard({
-    required String stepNumber,
+    required IconData icon,
     required String title,
     required String description,
-    required IconData icon,
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
+        gradient: LinearGradient(
+          colors: [
+            color.withValues(alpha: 0.15),
+            color.withValues(alpha: 0.08),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.4), width: 2.5),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Step Number Circle
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(0.4),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                stepNumber,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 16),
-
-          // Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(icon, color: color, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown.shade800,
-                        ),
-                      ),
+          // Icon dan Title dalam satu row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Icon Circle
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      color,
+                      color.withValues(alpha: 0.85),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.5),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.brown.shade700,
-                    height: 1.5,
+                child: Center(
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 32,
                   ),
                 ),
-              ],
+              ),
+
+              const SizedBox(width: 20),
+
+              // Title
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown.shade900,
+                    height: 1.3,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // Description - Full Width
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.brown.shade700,
+              height: 1.6,
+              letterSpacing: 0.2,
             ),
           ),
         ],
@@ -402,36 +329,78 @@ class _CaraBermainState extends State<CaraBermain> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Icon(Icons.gamepad, color: Colors.orange.shade700, size: 24),
-            const SizedBox(width: 8),
-            Text(
-              'Kontrol Game',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown.shade800,
-              ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.orange.shade100,
+                Colors.orange.shade50,
+              ],
             ),
-          ],
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.orange.shade300, width: 2.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange.withValues(alpha: 0.15),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade600,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.orange.withValues(alpha: 0.3),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.gamepad,
+                  color: Colors.white,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Text(
+                'Kontrol Game',
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown.shade900,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
         _buildControlItem(
           icon: Icons.touch_app,
           label: 'Ketuk Puzzle',
           description: 'Geser potongan puzzle',
         ),
+        const SizedBox(height: 4),
         _buildControlItem(
           icon: Icons.pause,
           label: 'Pause',
           description: 'Jeda permainan',
         ),
+        const SizedBox(height: 4),
         _buildControlItem(
           icon: Icons.lightbulb_outline,
           label: 'Hint',
           description: 'Lihat gambar asli',
         ),
+        const SizedBox(height: 4),
         _buildControlItem(
           icon: Icons.refresh,
           label: 'Reset',
@@ -446,19 +415,38 @@ class _CaraBermainState extends State<CaraBermain> {
     required String label,
     required String description,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12, left: 32),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.orange.shade200, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.withValues(alpha: 0.12),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.orange.shade100,
-              borderRadius: BorderRadius.circular(8),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.orange.shade100,
+                  Colors.orange.shade50,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.orange.shade300, width: 1.5),
             ),
-            child: Icon(icon, size: 20, color: Colors.orange.shade700),
+            child: Icon(icon, size: 24, color: Colors.orange.shade700),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -466,78 +454,22 @@ class _CaraBermainState extends State<CaraBermain> {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.brown.shade800,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown.shade900,
+                    letterSpacing: 0.2,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
                   description,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     color: Colors.brown.shade600,
+                    letterSpacing: 0.1,
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTipsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(Icons.tips_and_updates, color: Colors.orange.shade700, size: 24),
-            const SizedBox(width: 8),
-            Text(
-              'Tips Bermain',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown.shade800,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        _buildTipItem('Mulai dari sudut atau tepi gambar'),
-        _buildTipItem('Perhatikan pola dan warna gambar'),
-        _buildTipItem('Gunakan hint jika kesulitan'),
-        _buildTipItem('Latih kemampuan dengan bermain rutin'),
-        _buildTipItem('Tantang waktu terbaik Anda!'),
-      ],
-    );
-  }
-
-  Widget _buildTipItem(String tip) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 32),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 6),
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: Colors.orange.shade600,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              tip,
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.brown.shade700,
-                height: 1.5,
-              ),
             ),
           ),
         ],
