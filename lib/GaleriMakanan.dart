@@ -30,37 +30,43 @@ class _GaleriMakananState extends State<GaleriMakanan> {
       id: '1',
       name: 'Nasi Goreng',
       imagePath: 'assets/foods/nasi_goreng.png',
-      description: 'Nasi goreng adalah makanan khas Indonesia yang dibuat dari nasi yang digoreng dengan bumbu seperti bawang dan kecap, sehingga rasanya gurih dan aromanya khas.',
+      description:
+          'Nasi goreng adalah makanan khas Indonesia yang dibuat dari nasi yang digoreng dengan bumbu seperti bawang dan kecap, sehingga rasanya gurih dan aromanya khas.',
     ),
     FoodItem(
       id: '2',
       name: 'Sate Ayam',
       imagePath: 'assets/foods/sate.png',
-      description: 'Sate ayam dengan bumbu kacang',
+      description:
+          'Sate adalah makanan khas Indonesia berupa daging yang ditusuk, dibakar, lalu disajikan dengan bumbu seperti kacang atau kecap.',
     ),
     FoodItem(
       id: '3',
       name: 'Rendang',
       imagePath: 'assets/foods/rendang.png',
-      description: 'Rendang daging sapi yang lezat',
+      description:
+          'Rendang adalah masakan khas Minangkabau berupa daging yang dimasak lama dengan santan dan rempah-rempah hingga bumbunya meresap dan rasanya kaya.',
     ),
     FoodItem(
       id: '4',
       name: 'Gado-Gado',
       imagePath: 'assets/foods/gado_gado.png',
-      description: 'Sayuran dengan bumbu kacang',
+      description:
+          'Gado-gado adalah makanan khas Indonesia berisi sayuran rebus yang disiram bumbu kacang, biasanya ditambah lontong, tahu, tempe, dan telur.',
     ),
     FoodItem(
       id: '5',
       name: 'Soto Ayam',
       imagePath: 'assets/foods/soto_ayam.png',
-      description: 'Soto ayam dengan kuah kuning',
+      description:
+          'Soto ayam adalah sup khas Indonesia dengan kuah kuning gurih, berisi suwiran ayam dan biasanya disajikan dengan nasi, telur, serta taburan bawang goreng.',
     ),
     FoodItem(
       id: '6',
       name: 'Rawon',
       imagePath: 'assets/foods/rawon.png',
-      description: 'Rawon daging sapi dengan kuah hitam',
+      description:
+          'Rawon adalah sup daging khas Jawa Timur dengan kuah hitam dari kluwek, rasanya gurih dan aromanya khas.',
     ),
   ];
 
